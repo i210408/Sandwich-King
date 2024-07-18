@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Ingredient
   - Plate
+  - Serve
+  - Discard
   layers:
   - Default
   - TransparentFX
