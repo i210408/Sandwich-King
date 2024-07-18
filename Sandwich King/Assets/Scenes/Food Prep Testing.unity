@@ -198,6 +198,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2243201081208287905, guid: 204c2225e8c58fb47ac8d61776c34eb1, type: 3}
+      propertyPath: customerOrder.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2243201081208287905, guid: 204c2225e8c58fb47ac8d61776c34eb1, type: 3}
+      propertyPath: customerOrder.Array.data[0]
+      value: Chicken
+      objectReference: {fileID: 0}
+    - target: {fileID: 2243201081208287905, guid: 204c2225e8c58fb47ac8d61776c34eb1, type: 3}
+      propertyPath: customerOrder.Array.data[1]
+      value: Tomatoes
+      objectReference: {fileID: 0}
+    - target: {fileID: 2243201081208287905, guid: 204c2225e8c58fb47ac8d61776c34eb1, type: 3}
+      propertyPath: customerOrder.Array.data[2]
+      value: Lettuce
+      objectReference: {fileID: 0}
     - target: {fileID: 4341689186483616805, guid: 204c2225e8c58fb47ac8d61776c34eb1, type: 3}
       propertyPath: m_Name
       value: FoodPrepTable

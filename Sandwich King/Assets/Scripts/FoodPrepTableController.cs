@@ -5,7 +5,11 @@ using System.Collections.Generic;
 public class FoodPrepTableController : MonoBehaviour
 {
     private GameObject plate;
-    private List<Ingredient> plateIngredients;
+    private List<string> plateIngredients;
+    public List<string> customerOrder;
+    private int ingredientLimit;
+    private int correctGuess;
+
     void SelectIngredients()
     {
         if (Input.GetMouseButtonDown(0))
@@ -27,8 +31,7 @@ public class FoodPrepTableController : MonoBehaviour
                     bool alreadyExists = false;
                     for (int i = 0; i < plateIngredients.Count; i++)
                     {
-                        if (plateIngredients[i].ingredientName == ing.ingredientName &&
-                            plateIngredients[i].ingredientType == ing.ingredientType)
+                        if (plateIngredients[i] == ing.ingredientName)
                         {
                             alreadyExists = true;
                             break;
@@ -36,16 +39,21 @@ public class FoodPrepTableController : MonoBehaviour
                     }
                     
                     // If the ingredient doesn't already exist, add it to the list
-                    if (!alreadyExists)
+
+                    if (ingredientLimit == plateIngredients.Count)
                     {
-                        plateIngredients.Add(ing);
+                        Debug.Log("Ingredient limit reached. You cannot add more ingredients.");
+                    }   
+                    else if (!alreadyExists)
+                    {
+                        plateIngredients.Add(ing.ingredientName);
                         Debug.Log(ing.ingredientName + " " + ing.ingredientType + " added to the plate");
                         
                         // Print updated plate contents
                         Debug.Log("Plate contents are: ");
                         for (int i = 0; i < plateIngredients.Count; i++)
                         {
-                            Debug.Log(plateIngredients[i].ingredientName + " " + plateIngredients[i].ingredientType);
+                            Debug.Log(plateIngredients[i]);
                         }
                     }
                     else
@@ -53,20 +61,39 @@ public class FoodPrepTableController : MonoBehaviour
                         Debug.Log(ing.ingredientName + " " + ing.ingredientType + " already exists on the plate. Skipping...");
                     }
                 }
+                else if (hit.collider.CompareTag("Serve"))
+                {
+                    Debug.Log("Hit the serve button.");
+                    for (int i = 0; i < customerOrder.Count; i++)
+                    {
+                        if (plateIngredients.Contains(customerOrder[i]))
+                        {
+                            correctGuess++;
+                        }
+                    }
+                    Debug.Log("Sandwich served, you guessed " + correctGuess + " ingredients correctly.");
+                }
+                else if (hit.collider.CompareTag("Discard"))
+                {
+                    Debug.Log("Hit the discard button.");
+                    plateIngredients.Clear();
+                    Debug.Log("Ingredients on plate discarded. The plate is empty now.");
+                }
                 else
                 {
                     // Handle other types of hits or do nothing
-                    Debug.Log("Hit something but not an ingredient.");
+                    Debug.Log("Hit an unknown collider.");
                 }
             }
         }
     }
 
-
     void Start()
     {
         plate = GameObject.FindWithTag("Plate");
-        plateIngredients = new List<Ingredient>();
+        plateIngredients = new List<string>();
+        ingredientLimit = customerOrder.Count;
+        correctGuess = 0;
     }
 
     void Update()
