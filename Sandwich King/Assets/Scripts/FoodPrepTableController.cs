@@ -71,7 +71,20 @@ public class FoodPrepTableController : MonoBehaviour
                             correctGuess++;
                         }
                     }
-                    Debug.Log("Sandwich served, you guessed " + correctGuess + " ingredients correctly.");
+                    //Calculating score based on correct ingredients out of 100
+                    int score=(correctGuess*100)/ingredientLimit;
+                    int stars=0;
+                    //calculating stars
+                    if(score>0){
+                        stars++;
+                    }
+                    if(score>34){
+                        stars++;
+                    }
+                    if(score>67){
+                        stars++;
+                    }
+                    Debug.Log("Sandwich served, you guessed " + correctGuess + " ingredients correctly, and you have " + stars + " number of stars, and " + score + "/100 points.");
                 }
                 else if (hit.collider.CompareTag("Discard"))
                 {
