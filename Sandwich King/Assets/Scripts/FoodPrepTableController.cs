@@ -21,76 +21,15 @@ public class FoodPrepTableController : MonoBehaviour
             // Check if the ray hits an object
             if (hit.collider != null)
             {
-                // Check if the object has the tag "Ingredient"
-                if (hit.collider.CompareTag("Ingredient"))
+                if (hit.collider.CompareTag("Serve"))
                 {
-                    GameObject ingredient = hit.collider.gameObject;
-                    Ingredient ing = ingredient.GetComponent<Ingredient>();
-                    
-                    // Check if the ingredient is already in plateIngredients
-                    bool alreadyExists = false;
-                    for (int i = 0; i < plateIngredients.Count; i++)
-                    {
-                        if (plateIngredients[i] == ing.ingredientName)
-                        {
-                            alreadyExists = true;
-                            break;
-                        }
-                    }
-                    
-                    // If the ingredient doesn't already exist, add it to the list
-
-                    if (ingredientLimit == plateIngredients.Count)
-                    {
-                        Debug.Log("Ingredient limit reached. You cannot add more ingredients.");
-                    }   
-                    else if (!alreadyExists)
-                    {
-                        plateIngredients.Add(ing.ingredientName);
-                        Debug.Log(ing.ingredientName + " " + ing.ingredientType + " added to the plate");
-                        
-                        // Print updated plate contents
-                        Debug.Log("Plate contents are: ");
-                        for (int i = 0; i < plateIngredients.Count; i++)
-                        {
-                            Debug.Log(plateIngredients[i]);
-                        }
-                    }
-                    else
-                    {
-                        Debug.Log(ing.ingredientName + " " + ing.ingredientType + " already exists on the plate. Skipping...");
-                    }
-                }
-                else if (hit.collider.CompareTag("Serve"))
-                {
-                    Debug.Log("Hit the serve button.");
-                    for (int i = 0; i < customerOrder.Count; i++)
-                    {
-                        if (plateIngredients.Contains(customerOrder[i]))
-                        {
-                            correctGuess++;
-                        }
-                    }
-                    //Calculating score based on correct ingredients out of 100
-                    int score=(correctGuess*100)/ingredientLimit;
-                    int stars=0;
-                    //calculating stars
-                    if(score>0){
-                        stars++;
-                    }
-                    if(score>34){
-                        stars++;
-                    }
-                    if(score>67){
-                        stars++;
-                    }
-                    Debug.Log("Sandwich served, you guessed " + correctGuess + " ingredients correctly, and you have " + stars + " number of stars, and " + score + "/100 points.");
+                    Serve();
+                    Destroy(hit.collider.gameObject);                   // Here for mobile testing, remove later.
                 }
                 else if (hit.collider.CompareTag("Discard"))
                 {
-                    Debug.Log("Hit the discard button.");
-                    plateIngredients.Clear();
-                    Debug.Log("Ingredients on plate discarded. The plate is empty now.");
+                    Discard();
+                    Destroy(hit.collider.gameObject);                   // Here for mobile testing, remove later.
                 }
                 else
                 {
@@ -98,6 +37,72 @@ public class FoodPrepTableController : MonoBehaviour
                     Debug.Log("Hit an unknown collider.");
                 }
             }
+        }
+    }
+
+    void Serve()
+    {
+        Debug.Log("Hit the serve button.");
+        for (int i = 0; i < customerOrder.Count; i++)
+        {
+            if (plateIngredients.Contains(customerOrder[i]))
+            {
+                correctGuess++;
+            }
+        }
+        //Calculating score based on correct ingredients out of 100
+        int score = (correctGuess * 100) / ingredientLimit;
+        int stars = 0;
+        //calculating stars
+        if (score > 0)
+        {
+            stars++;
+        }
+        if (score > 34)
+        {
+            stars++;
+        }
+        if (score > 67)
+        {
+            stars++;
+        }
+        Debug.Log("Sandwich served, you guessed " + correctGuess + " ingredients correctly, and you have " + stars + " number of stars, and " + score + "/100 points.");
+    }
+
+    void Discard()
+    {
+        Debug.Log("Hit the discard button.");
+        plateIngredients.Clear();
+        Debug.Log("Ingredients on plate discarded. The plate is empty now.");
+    }
+
+    public void AddIngredient(GameObject ingredient)
+    {
+        Ingredient ing = ingredient.GetComponent<Ingredient>();
+
+        // Check if the ingredient is already in plateIngredients
+        bool alreadyExists = plateIngredients.Contains(ing.ingredientName);
+
+        // If the ingredient doesn't already exist, add it to the list
+        if (ingredientLimit == plateIngredients.Count)
+        {
+            Debug.Log("Ingredient limit reached. You cannot add more ingredients.");
+        }
+        else if (!alreadyExists)
+        {
+            plateIngredients.Add(ing.ingredientName);
+            Debug.Log(ing.ingredientName + " " + ing.ingredientType + " added to the plate");
+
+            // Print updated plate contents
+            Debug.Log("Plate contents are: ");
+            foreach (var item in plateIngredients)
+            {
+                Debug.Log(item);
+            }
+        }
+        else
+        {
+            Debug.Log(ing.ingredientName + " " + ing.ingredientType + " already exists on the plate. Skipping...");
         }
     }
 
@@ -111,6 +116,6 @@ public class FoodPrepTableController : MonoBehaviour
 
     void Update()
     {
-       SelectIngredients();
+        SelectIngredients();
     }
 }
