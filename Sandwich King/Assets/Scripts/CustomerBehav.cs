@@ -17,14 +17,18 @@ public TextMeshPro Textbox;
     void Start()
     {
         //Display hi, then upon a click, display order
-        Textbox.text="Good Morning!";
+        Textbox.text="Hello! I want: \n";
+        for (int i = 0; i < Order.Count; i++)
+        {
+            Textbox.text += Order[i] + ", ";
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
         if(Input.GetMouseButtonDown(0)){
-            Textbox.text=Order[0] + "\n" + Order[1]+ "\n" + Order[2];
+            Textbox.text= "Please make it quick";
         }
         //For now, if tap, delete, then spawn next, until Total is done. or maybe that code should be in the spawner instead? 
         //Maybe. Yes, i think so

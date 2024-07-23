@@ -45,7 +45,7 @@ public class DraggableIngredient : MonoBehaviour, IBeginDragHandler, IDragHandle
             table.GetComponent<FoodPrepTableController>().AddIngredient(gameObject);
             transform.position = startPosition;
             transform.SetParent(startParent);
-            Destroy(gameObject);            // Here for mobile testing, will remove it later.
+            // Destroy(gameObject);            // Here for mobile testing, will remove it later.
         }
         else
         {

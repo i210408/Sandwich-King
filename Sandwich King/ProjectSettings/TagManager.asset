@@ -9,6 +9,7 @@ TagManager:
   - Serve
   - Discard
   - Table
+  - Customer
   layers:
   - Default
   - TransparentFX
