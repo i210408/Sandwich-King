@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
+using TMPro;
 
 public class FoodPrepTableController : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class FoodPrepTableController : MonoBehaviour
     public List<string> customerOrder;
     private int ingredientLimit;
     private int correctGuess;
+    private CustomerBehav customerBehaviour;
+    public TextMeshProUGUI currentIngredientBox;
 
     void SelectIngredients()
     {
@@ -24,12 +27,12 @@ public class FoodPrepTableController : MonoBehaviour
                 if (hit.collider.CompareTag("Serve"))
                 {
                     Serve();
-                    Destroy(hit.collider.gameObject);                   // Here for mobile testing, remove later.
+                    // Destroy(hit.collider.gameObject);                   // Here for mobile testing, remove later.
                 }
                 else if (hit.collider.CompareTag("Discard"))
                 {
                     Discard();
-                    Destroy(hit.collider.gameObject);                   // Here for mobile testing, remove later.
+                    // Destroy(hit.collider.gameObject);                   // Here for mobile testing, remove later.
                 }
                 else
                 {
@@ -67,12 +70,15 @@ public class FoodPrepTableController : MonoBehaviour
             stars++;
         }
         Debug.Log("Sandwich served, you guessed " + correctGuess + " ingredients correctly, and you have " + stars + " number of stars, and " + score + "/100 points.");
+        currentIngredientBox.text += "Sandwich served, you guessed " + correctGuess + " ingredients correctly, and you have " + stars + " number of stars, and " + score + "/100 points.";
+        correctGuess = 0;
     }
 
     void Discard()
     {
         Debug.Log("Hit the discard button.");
         plateIngredients.Clear();
+        UpdatePlateContentsDialogue();
         Debug.Log("Ingredients on plate discarded. The plate is empty now.");
     }
 
@@ -93,12 +99,14 @@ public class FoodPrepTableController : MonoBehaviour
             plateIngredients.Add(ing.ingredientName);
             Debug.Log(ing.ingredientName + " " + ing.ingredientType + " added to the plate");
 
+            UpdatePlateContentsDialogue();
             // Print updated plate contents
             Debug.Log("Plate contents are: ");
             foreach (var item in plateIngredients)
             {
                 Debug.Log(item);
             }
+
         }
         else
         {
@@ -112,6 +120,29 @@ public class FoodPrepTableController : MonoBehaviour
         plateIngredients = new List<string>();
         ingredientLimit = customerOrder.Count;
         correctGuess = 0;
+        customerBehaviour = GameObject.FindGameObjectWithTag("Customer").GetComponent<CustomerBehav>();
+        if (customerBehaviour != null)
+        {
+            customerOrder = customerBehaviour.Order;
+            ingredientLimit = customerOrder.Count;
+        }
+        UpdatePlateContentsDialogue();
+    }
+
+    void UpdatePlateContentsDialogue()
+    {
+        if (plateIngredients.Count == 0)
+        {
+            currentIngredientBox.text = "Plate is empty";
+        }
+        else
+        {
+            currentIngredientBox.text = "";
+            for (int i = 0; i < plateIngredients.Count; i++)
+            {
+                currentIngredientBox.text += plateIngredients[i] + ", ";
+            }
+        }
     }
 
     void Update()
