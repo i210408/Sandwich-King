@@ -42,7 +42,10 @@ public class DraggableIngredient : MonoBehaviour, IBeginDragHandler, IDragHandle
 
         if (isOverPlate)
         {
-            table.GetComponent<FoodPrepTableController>().AddIngredient(gameObject);
+            if (table.GetComponent<FoodPrepTableController>().AddIngredient(gameObject))
+            {
+                CreateSpriteCopy();
+            }
             transform.position = startPosition;
             transform.SetParent(startParent);
             // Destroy(gameObject);            // Here for mobile testing, will remove it later.
@@ -95,5 +98,14 @@ public class DraggableIngredient : MonoBehaviour, IBeginDragHandler, IDragHandle
             isOverPlate = false;
             Debug.Log("Left Plate Trigger Radius.");
         }
+    }
+
+    private void CreateSpriteCopy()
+    {
+        GameObject objectCopy = Instantiate(gameObject, transform.position, transform.rotation);
+        objectCopy.transform.SetParent(transform.parent);
+        objectCopy.transform.localScale = transform.localScale;
+        objectCopy.tag = "Copy";
+        Destroy(objectCopy.GetComponent<DraggableIngredient>());
     }
 }
