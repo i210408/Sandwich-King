@@ -158,3 +158,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81c03f6a30b582848a701ef2c400cd7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cloneTag: Copy
