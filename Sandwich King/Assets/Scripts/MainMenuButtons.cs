@@ -10,8 +10,6 @@ public class MainmenuButtons : MonoBehaviour
 
     void Start()
     {
-     
-
         // Add listeners to the buttons
         playButton.onClick.AddListener(OnPlayButtonPressed);
         tutorialButton.onClick.AddListener(OnTutorialButtonPressed);
