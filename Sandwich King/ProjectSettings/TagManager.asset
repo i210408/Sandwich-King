@@ -60,3 +60,6 @@ TagManager:
   - name: Ingredients
     uniqueID: 3272603589
     locked: 0
+  - name: kaboom
+    uniqueID: 2936703337
+    locked: 0

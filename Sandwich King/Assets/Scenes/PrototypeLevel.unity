@@ -1023,6 +1023,10 @@ PrefabInstance:
       value: -986914453
       objectReference: {fileID: 0}
     - target: {fileID: 7861759498136291280, guid: d3644dc9c779ca24cbf8a3da60b60eaf, type: 3}
+      propertyPath: explosionPrefab
+      value: 
+      objectReference: {fileID: 139366, guid: b185c1a9cf067374586d095111b15bd1, type: 3}
+    - target: {fileID: 7861759498136291280, guid: d3644dc9c779ca24cbf8a3da60b60eaf, type: 3}
       propertyPath: finalSandwiches.Array.size
       value: 3
       objectReference: {fileID: 0}
