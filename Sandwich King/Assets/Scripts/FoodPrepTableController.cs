@@ -78,11 +78,12 @@ public class FoodPrepTableController : MonoBehaviour
     {
         Debug.Log("Hit the discard button.");
         plateIngredients.Clear();
+        RemoveCopies();
         UpdatePlateContentsDialogue();
         Debug.Log("Ingredients on plate discarded. The plate is empty now.");
     }
 
-    public void AddIngredient(GameObject ingredient)
+    public bool AddIngredient(GameObject ingredient)
     {
         Ingredient ing = ingredient.GetComponent<Ingredient>();
 
@@ -93,6 +94,7 @@ public class FoodPrepTableController : MonoBehaviour
         if (ingredientLimit == plateIngredients.Count)
         {
             Debug.Log("Ingredient limit reached. You cannot add more ingredients.");
+            return false;
         }
         else if (!alreadyExists)
         {
@@ -106,11 +108,12 @@ public class FoodPrepTableController : MonoBehaviour
             {
                 Debug.Log(item);
             }
-
+            return true;
         }
         else
         {
             Debug.Log(ing.ingredientName + " " + ing.ingredientType + " already exists on the plate. Skipping...");
+            return false;
         }
     }
 
@@ -142,6 +145,15 @@ public class FoodPrepTableController : MonoBehaviour
             {
                 currentIngredientBox.text += plateIngredients[i] + ", ";
             }
+        }
+    }
+
+    private void RemoveCopies()
+    {
+         GameObject[] copy = GameObject.FindGameObjectsWithTag("Copy");
+        foreach (GameObject c in copy)
+        {
+            Destroy(c);
         }
     }
 
