@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using TMPro;
+using System.Linq;
 
 public class FoodPrepTableController : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class FoodPrepTableController : MonoBehaviour
     private int correctGuess;
     private CustomerBehav customerBehaviour;
     public TextMeshProUGUI currentIngredientBox;
-
+    public List<Sprite> finalSandwiches;
     void SelectIngredients()
     {
         if (Input.GetMouseButtonDown(0))
@@ -69,6 +70,9 @@ public class FoodPrepTableController : MonoBehaviour
         {
             stars++;
         }
+        plateIngredients.Clear();
+        RemoveCopies();
+        UpdatePlateSprite(stars);
         Debug.Log("Sandwich served, you guessed " + correctGuess + " ingredients correctly, and you have " + stars + " number of stars, and " + score + "/100 points.");
         currentIngredientBox.text += "Sandwich served, you guessed " + correctGuess + " ingredients correctly, and you have " + stars + " number of stars, and " + score + "/100 points.";
         correctGuess = 0;
@@ -154,6 +158,32 @@ public class FoodPrepTableController : MonoBehaviour
         foreach (GameObject c in copy)
         {
             Destroy(c);
+        }
+    }
+
+    private void UpdatePlateSprite(int stars)
+    {
+        SpriteRenderer plate = GameObject.FindGameObjectWithTag("Plate").GetComponent<SpriteRenderer>();
+        if (finalSandwiches.Count != 3)
+        {
+            Debug.Log("The sandwich sprites have not been set properly.");
+            return;
+        }
+        if(stars == 0 || stars == 1)
+        {
+            plate.sprite = finalSandwiches[0];
+        }
+        else if (stars == 2)
+        {
+            plate.sprite = finalSandwiches[1];
+        }
+        else if (stars == 3)
+        {
+            plate.sprite = finalSandwiches[2];
+        }
+        else
+        {
+            Debug.Log("Something went wrong with the stars.");
         }
     }
 
