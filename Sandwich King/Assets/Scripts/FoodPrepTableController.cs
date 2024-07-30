@@ -1,8 +1,7 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using System.Linq;
 
 public class FoodPrepTableController : MonoBehaviour
 {
@@ -14,6 +13,30 @@ public class FoodPrepTableController : MonoBehaviour
     private CustomerBehav customerBehaviour;
     public TextMeshProUGUI currentIngredientBox;
     public List<Sprite> finalSandwiches;
+
+    // Reference to the explosion prefab
+    public GameObject explosionPrefab; // Drag your explosion prefab here
+
+    void Start()
+    {
+        plate = GameObject.FindWithTag("Plate");
+        plateIngredients = new List<string>();
+        ingredientLimit = customerOrder.Count;
+        correctGuess = 0;
+        customerBehaviour = GameObject.FindGameObjectWithTag("Customer").GetComponent<CustomerBehav>();
+        if (customerBehaviour != null)
+        {
+            customerOrder = customerBehaviour.Order;
+            ingredientLimit = customerOrder.Count;
+        }
+        UpdatePlateContentsDialogue();
+    }
+
+    void Update()
+    {
+        SelectIngredients();
+    }
+
     void SelectIngredients()
     {
         if (Input.GetMouseButtonDown(0))
@@ -27,13 +50,11 @@ public class FoodPrepTableController : MonoBehaviour
             {
                 if (hit.collider.CompareTag("Serve"))
                 {
-                    Serve();
-                    // Destroy(hit.collider.gameObject);                   // Here for mobile testing, remove later.
+                    StartCoroutine(Serve());
                 }
                 else if (hit.collider.CompareTag("Discard"))
                 {
                     Discard();
-                    // Destroy(hit.collider.gameObject);                   // Here for mobile testing, remove later.
                 }
                 else
                 {
@@ -44,7 +65,7 @@ public class FoodPrepTableController : MonoBehaviour
         }
     }
 
-    void Serve()
+    IEnumerator Serve()
     {
         Debug.Log("Hit the serve button.");
         for (int i = 0; i < customerOrder.Count; i++)
@@ -54,25 +75,37 @@ public class FoodPrepTableController : MonoBehaviour
                 correctGuess++;
             }
         }
-        //Calculating score based on correct ingredients out of 100
+
+        // Trigger explosion effect on top of the plate
+        if (explosionPrefab != null && plate != null)
+        {
+            Vector3 platePosition = plate.transform.position;
+            Vector3 explosionPosition = platePosition; // Use plate's position
+            explosionPosition.z = 0; // Ensure z is set to 0 for 2D
+
+            // Instantiate the explosion prefab and make it play only once
+            GameObject explosion = Instantiate(explosionPrefab, explosionPosition, Quaternion.identity);
+            // Optionally, destroy the explosion after its duration if it doesn't destroy itself
+            Destroy(explosion, 2f); // Adjust the duration to match the length of your explosion effect
+        }
+        else
+        {
+            Debug.LogWarning("Explosion Prefab or Plate is not set. Please assign the necessary references.");
+        }
+
+        // Wait for the explosion animation or effect to complete
+        yield return new WaitForSeconds(2f); // Adjust this duration to match the length of your explosion effect
+
+        // Continue with score calculation and updating the plate
         int score = (correctGuess * 100) / ingredientLimit;
         int stars = 0;
-        //calculating stars
-        if (score > 0)
-        {
-            stars++;
-        }
-        if (score > 34)
-        {
-            stars++;
-        }
-        if (score > 67)
-        {
-            stars++;
-        }
+        if (score > 0) stars++;
+        if (score > 34) stars++;
+        if (score > 67) stars++;
         plateIngredients.Clear();
         RemoveCopies();
         UpdatePlateSprite(stars);
+
         Debug.Log("Sandwich served, you guessed " + correctGuess + " ingredients correctly, and you have " + stars + " number of stars, and " + score + "/100 points.");
         currentIngredientBox.text += "Sandwich served, you guessed " + correctGuess + " ingredients correctly, and you have " + stars + " number of stars, and " + score + "/100 points.";
         correctGuess = 0;
@@ -121,21 +154,6 @@ public class FoodPrepTableController : MonoBehaviour
         }
     }
 
-    void Start()
-    {
-        plate = GameObject.FindWithTag("Plate");
-        plateIngredients = new List<string>();
-        ingredientLimit = customerOrder.Count;
-        correctGuess = 0;
-        customerBehaviour = GameObject.FindGameObjectWithTag("Customer").GetComponent<CustomerBehav>();
-        if (customerBehaviour != null)
-        {
-            customerOrder = customerBehaviour.Order;
-            ingredientLimit = customerOrder.Count;
-        }
-        UpdatePlateContentsDialogue();
-    }
-
     void UpdatePlateContentsDialogue()
     {
         if (plateIngredients.Count == 0)
@@ -154,7 +172,7 @@ public class FoodPrepTableController : MonoBehaviour
 
     private void RemoveCopies()
     {
-         GameObject[] copy = GameObject.FindGameObjectsWithTag("Copy");
+        GameObject[] copy = GameObject.FindGameObjectsWithTag("Copy");
         foreach (GameObject c in copy)
         {
             Destroy(c);
@@ -163,32 +181,27 @@ public class FoodPrepTableController : MonoBehaviour
 
     private void UpdatePlateSprite(int stars)
     {
-        SpriteRenderer plate = GameObject.FindGameObjectWithTag("Plate").GetComponent<SpriteRenderer>();
+        SpriteRenderer plateRenderer = plate.GetComponent<SpriteRenderer>();
         if (finalSandwiches.Count != 3)
         {
             Debug.Log("The sandwich sprites have not been set properly.");
             return;
         }
-        if(stars == 0 || stars == 1)
+        if (stars == 0 || stars == 1)
         {
-            plate.sprite = finalSandwiches[0];
+            plateRenderer.sprite = finalSandwiches[0];
         }
         else if (stars == 2)
         {
-            plate.sprite = finalSandwiches[1];
+            plateRenderer.sprite = finalSandwiches[1];
         }
         else if (stars == 3)
         {
-            plate.sprite = finalSandwiches[2];
+            plateRenderer.sprite = finalSandwiches[2];
         }
         else
         {
             Debug.Log("Something went wrong with the stars.");
         }
-    }
-
-    void Update()
-    {
-        SelectIngredients();
     }
 }
