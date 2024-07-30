@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class FoodPrepTableController : MonoBehaviour
 {
@@ -86,7 +87,7 @@ public class FoodPrepTableController : MonoBehaviour
             // Instantiate the explosion prefab and make it play only once
             GameObject explosion = Instantiate(explosionPrefab, explosionPosition, Quaternion.identity);
             // Optionally, destroy the explosion after its duration if it doesn't destroy itself
-            Destroy(explosion, 2f); // Adjust the duration to match the length of your explosion effect
+            Destroy(explosion, 0.5f); // Adjust the duration to match the length of your explosion effect
         }
         else
         {
@@ -94,7 +95,7 @@ public class FoodPrepTableController : MonoBehaviour
         }
 
         // Wait for the explosion animation or effect to complete
-        yield return new WaitForSeconds(2f); // Adjust this duration to match the length of your explosion effect
+        yield return new WaitForSeconds(0.5f); // Adjust this duration to match the length of your explosion effect
 
         // Continue with score calculation and updating the plate
         int score = (correctGuess * 100) / ingredientLimit;
@@ -109,6 +110,11 @@ public class FoodPrepTableController : MonoBehaviour
         Debug.Log("Sandwich served, you guessed " + correctGuess + " ingredients correctly, and you have " + stars + " number of stars, and " + score + "/100 points.");
         currentIngredientBox.text += "Sandwich served, you guessed " + correctGuess + " ingredients correctly, and you have " + stars + " number of stars, and " + score + "/100 points.";
         correctGuess = 0;
+
+        yield return new WaitForSeconds(2f);
+
+        GameObject.FindWithTag("Data").GetComponent<StarData>().SetStarsEarned(stars);
+        SceneManager.LoadScene("ResultsScene");
     }
 
     void Discard()

@@ -6,15 +6,22 @@ using UnityEngine.UI;
 public class ResultsManager : MonoBehaviour
 {
     public Image[] stars; // Array to hold the star images
-    public Button mainMenuButton;
-    public Button levelSelectButton;
 
-    private int starsEarned;
+    private int starsEarned = 0;
 
     void Start()
     {
         // Get the number of stars earned from the previous scene
-        starsEarned = PlayerPrefs.GetInt("StarsEarned", 0);
+        StarData starData = FindObjectOfType<StarData>();
+        if (starData != null)
+        {
+            starsEarned = starData.GetStarsEarned();
+        }
+        else
+        {
+            Debug.LogError("Could not find the StarData Object.");
+        }
+        
 
         // Ensure all stars are initially inactive
         foreach (var star in stars)
@@ -24,10 +31,6 @@ public class ResultsManager : MonoBehaviour
 
         // Animate the stars based on the number of stars earned
         StartCoroutine(ShowStars());
-
-        // Assign button click events
-        mainMenuButton.onClick.AddListener(() => SceneManager.LoadScene("Menu"));
-        levelSelectButton.onClick.AddListener(() => SceneManager.LoadScene("Level  Select"));
     }
 
     IEnumerator ShowStars()
