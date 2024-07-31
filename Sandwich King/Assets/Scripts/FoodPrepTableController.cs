@@ -12,8 +12,9 @@ public class FoodPrepTableController : MonoBehaviour
     private int ingredientLimit;
     private int correctGuess;
     private CustomerBehav customerBehaviour;
-    public TextMeshProUGUI currentIngredientBox;
+    public TextMeshProUGUI customerDialogue;
     public List<Sprite> finalSandwiches;
+    public List<Sprite> customerEmotions;
 
     // Reference to the explosion prefab
     public GameObject explosionPrefab; // Drag your explosion prefab here
@@ -30,7 +31,6 @@ public class FoodPrepTableController : MonoBehaviour
             customerOrder = customerBehaviour.Order;
             ingredientLimit = customerOrder.Count;
         }
-        UpdatePlateContentsDialogue();
     }
 
     void Update()
@@ -108,7 +108,7 @@ public class FoodPrepTableController : MonoBehaviour
         UpdatePlateSprite(stars);
 
         Debug.Log("Sandwich served, you guessed " + correctGuess + " ingredients correctly, and you have " + stars + " number of stars, and " + score + "/100 points.");
-        currentIngredientBox.text += "Sandwich served, you guessed " + correctGuess + " ingredients correctly, and you have " + stars + " number of stars, and " + score + "/100 points.";
+        UpdateCustomer(stars);
         correctGuess = 0;
 
         yield return new WaitForSeconds(2f);
@@ -122,7 +122,6 @@ public class FoodPrepTableController : MonoBehaviour
         Debug.Log("Hit the discard button.");
         plateIngredients.Clear();
         RemoveCopies();
-        UpdatePlateContentsDialogue();
         Debug.Log("Ingredients on plate discarded. The plate is empty now.");
     }
 
@@ -144,7 +143,6 @@ public class FoodPrepTableController : MonoBehaviour
             plateIngredients.Add(ing.ingredientName);
             Debug.Log(ing.ingredientName + " " + ing.ingredientType + " added to the plate");
 
-            UpdatePlateContentsDialogue();
             // Print updated plate contents
             Debug.Log("Plate contents are: ");
             foreach (var item in plateIngredients)
@@ -160,21 +158,43 @@ public class FoodPrepTableController : MonoBehaviour
         }
     }
 
-    void UpdatePlateContentsDialogue()
+    void UpdateCustomer(int stars = 0)
     {
-        if (plateIngredients.Count == 0)
+        SpriteRenderer customer = GameObject.FindWithTag("Customer").GetComponent<SpriteRenderer>();
+        if (customer == null)
         {
-            currentIngredientBox.text = "Plate is empty";
+            Debug.LogError("The customer object not found or it does not have a sprite renderer.");
+        }
+        if (customerEmotions == null)
+        {
+            Debug.LogError("The customer emotion sprites have not been set properly.");
+        }
+        if (stars == 0)
+        {
+            customerDialogue.text = "THIS IS TERRIBLE! \nYou did not get a single ingredient right.";
+            customer.sprite = customerEmotions[0];
+        }
+        else if (stars == 1)
+        {
+            customerDialogue.text = "This is not what I ordered. Most ingredients I requested are missing.";
+            customer.sprite = customerEmotions[0];
+        }
+        else if (stars == 2)
+        {
+            customerDialogue.text = "I think you might have mixed up my order with someone else's but this looks alright.";
+            customer.sprite = customerEmotions[1];
+        }
+        else if (stars == 3)
+        {
+            customerDialogue.text = "Thank you! \nThis is exactly what I wanted.";
+            customer.sprite = customerEmotions[2];
         }
         else
         {
-            currentIngredientBox.text = "";
-            for (int i = 0; i < plateIngredients.Count; i++)
-            {
-                currentIngredientBox.text += plateIngredients[i] + ", ";
-            }
+            Debug.LogError("Something went wrong while updating customer appearance and dialogue.");
         }
     }
+
 
     private void RemoveCopies()
     {
