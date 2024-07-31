@@ -6,7 +6,7 @@ public class ResposiveCamera : MonoBehaviour
 {
     public SpriteRenderer background;
 
-    void Start()
+    void Update()
     {
         float screenRatio = (float)Screen.width / (float)Screen.height;
         float targetRatio = background.bounds.size.x / background.bounds.size.y;

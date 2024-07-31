@@ -14,5 +14,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levels:
   - sceneName: PrototypeLevel
-  - sceneName: SampleScene
-  - sceneName: Food Prep Testing
