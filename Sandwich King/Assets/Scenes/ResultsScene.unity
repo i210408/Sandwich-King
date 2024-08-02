@@ -689,6 +689,10 @@ MonoBehaviour:
   - {fileID: 420108981}
   - {fileID: 966638330}
   - {fileID: 2070356687}
+  mainMenuButton: {fileID: 446494970}
+  levelSelectButton: {fileID: 212962253}
+  levelList: {fileID: 11400000, guid: d53fb31f7bd4dd14c91913f287665c48, type: 2}
+  currentLevelName: 
 --- !u!4 &844206582
 Transform:
   m_ObjectHideFlags: 0

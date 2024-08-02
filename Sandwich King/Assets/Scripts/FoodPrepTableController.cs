@@ -19,6 +19,10 @@ public class FoodPrepTableController : MonoBehaviour
     // Reference to the explosion prefab
     public GameObject explosionPrefab; // Drag your explosion prefab here
 
+    // Reference to StarData
+    private StarData starData;
+    private string currentLevelName; // Name of the current level
+
     void Start()
     {
         plate = GameObject.FindWithTag("Plate");
@@ -31,6 +35,21 @@ public class FoodPrepTableController : MonoBehaviour
             customerOrder = customerBehaviour.Order;
             ingredientLimit = customerOrder.Count;
         }
+
+        // Initialize StarData
+        starData = FindObjectOfType<StarData>();
+        if (starData != null)
+        {
+            // Dynamically set the current level name
+            currentLevelName = SceneManager.GetActiveScene().name;
+            starData.SetCurrentLevelName(currentLevelName);
+        }
+        else
+        {
+            Debug.LogError("StarData not found.");
+        }
+
+        Debug.Log("Current level name set to: " + currentLevelName);
     }
 
     void Update()
@@ -113,7 +132,19 @@ public class FoodPrepTableController : MonoBehaviour
 
         yield return new WaitForSeconds(2f);
 
-        GameObject.FindWithTag("Data").GetComponent<StarData>().SetStarsEarned(stars);
+        // Set stars earned in StarData
+        if (starData != null)
+        {
+            starData.SetStarsEarned(stars);
+            starData.SetCurrentLevelName(currentLevelName); // Ensure current level name is set before transitioning
+            Debug.Log("Current level name set to: " + currentLevelName);
+        }
+        else
+        {
+            Debug.LogError("StarData not found.");
+        }
+
+        // Load the results scene
         SceneManager.LoadScene("ResultsScene");
     }
 
@@ -194,7 +225,6 @@ public class FoodPrepTableController : MonoBehaviour
             Debug.LogError("Something went wrong while updating customer appearance and dialogue.");
         }
     }
-
 
     private void RemoveCopies()
     {
