@@ -104,7 +104,7 @@ public class DraggableIngredient : MonoBehaviour, IBeginDragHandler, IDragHandle
     {
         GameObject objectCopy = Instantiate(gameObject, transform.position, transform.rotation);
         objectCopy.transform.SetParent(transform.parent);
-        objectCopy.transform.localScale = transform.localScale;
+        objectCopy.transform.localScale = transform.localScale * 1.5f;
         objectCopy.tag = "Copy";
         Destroy(objectCopy.GetComponent<DraggableIngredient>());
     }
