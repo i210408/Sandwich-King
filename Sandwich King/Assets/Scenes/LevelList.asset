@@ -12,44 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 741e6e97442c8e5438481d45d8bb8114, type: 3}
   m_Name: LevelList
   m_EditorClassIdentifier: 
-  levels:
-  - sceneName: PrototypeLevel
-    starsEarned: 0
-  - sceneName: PrototypeLevel
-    starsEarned: 0
-  - sceneName: PrototypeLevel
-    starsEarned: 0
-  - sceneName: PrototypeLevel
-    starsEarned: 0
-  - sceneName: PrototypeLevel
-    starsEarned: 0
-  - sceneName: PrototypeLevel
-    starsEarned: 0
-  - sceneName: PrototypeLevel
-    starsEarned: 0
-  - sceneName: PrototypeLevel
-    starsEarned: 0
-  - sceneName: PrototypeLevel
-    starsEarned: 0
-  - sceneName: PrototypeLevel
-    starsEarned: 0
-  - sceneName: PrototypeLevel
-    starsEarned: 0
-  - sceneName: PrototypeLevel
-    starsEarned: 0
-  - sceneName: PrototypeLevel
-    starsEarned: 0
-  - sceneName: PrototypeLevel
-    starsEarned: 0
-  - sceneName: PrototypeLevel
-    starsEarned: 0
-  - sceneName: PrototypeLevel
-    starsEarned: 0
-  - sceneName: PrototypeLevel
-    starsEarned: 0
-  - sceneName: PrototypeLevel
-    starsEarned: 0
-  - sceneName: PrototypeLevel
-    starsEarned: 0
-  - sceneName: PrototypeLevel
-    starsEarned: 0
+  levels: []
