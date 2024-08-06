@@ -13,5 +13,25 @@ MonoBehaviour:
   m_Name: LevelList
   m_EditorClassIdentifier: 
   levels:
-  - sceneName: PrototypeLevel
+  - sceneName: Level 1
+    starsEarned: 0
+  - sceneName: Level 2
+    starsEarned: 0
+  - sceneName: Level 3
+    starsEarned: 0
+  - sceneName: Level 4
+    starsEarned: 0
+  - sceneName: Level 5
+    starsEarned: 0
+  - sceneName: Level 6
+    starsEarned: 0
+  - sceneName: Level 7
+    starsEarned: 0
+  - sceneName: Level 8
+    starsEarned: 0
+  - sceneName: Level 9
+    starsEarned: 0
+  - sceneName: Level 9
+    starsEarned: 0
+  - sceneName: Level 10
     starsEarned: 0
