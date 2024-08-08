@@ -12,6 +12,7 @@ TagManager:
   - Customer
   - Copy
   - Data
+  - Tick
   layers:
   - Default
   - TransparentFX

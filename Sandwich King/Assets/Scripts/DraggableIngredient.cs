@@ -7,6 +7,7 @@ public class DraggableIngredient : MonoBehaviour, IBeginDragHandler, IDragHandle
     private Transform startParent;
     private bool isOverPlate;
     private GameObject table;
+    private static bool controls = false;
 
     void Start()
     {
@@ -26,9 +27,13 @@ public class DraggableIngredient : MonoBehaviour, IBeginDragHandler, IDragHandle
 
     public void OnDrag(PointerEventData eventData)
     {
-        Vector3 position = GetCurrentDragPosition();
-        position.z = 0; // Ensure the ingredient stays on the same plane
-        transform.position = position;
+        if (controls)
+        {
+            Vector3 position = GetCurrentDragPosition();
+            position.z = 0; // Ensure the ingredient stays on the same plane
+            transform.position = position;
+        }
+        
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -107,5 +112,10 @@ public class DraggableIngredient : MonoBehaviour, IBeginDragHandler, IDragHandle
         objectCopy.transform.localScale = transform.localScale * 1.5f;
         objectCopy.tag = "Copy";
         Destroy(objectCopy.GetComponent<DraggableIngredient>());
+    }
+
+    public static void EnableControls()
+    {
+        controls = true;
     }
 }

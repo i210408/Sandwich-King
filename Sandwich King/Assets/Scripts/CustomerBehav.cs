@@ -9,15 +9,25 @@ public class CustomerBehav : MonoBehaviour
     public int Score=0;
     public List<string> Acceptable;
     public TextMeshProUGUI Textbox;
-    // Start is called before the first frame update
+    GameObject serve;
+    GameObject discard;
     void Start()
     {
-        StartCoroutine(StateOrder());
+        serve = GameObject.FindWithTag("Serve");
+        discard = GameObject.FindWithTag("Discard");
+        serve.SetActive(false);
+        discard.SetActive(false);
+        StateOrder();
     }
 
-    IEnumerator StateOrder()
+    void Update()
     {
-        //Display hi, then upon a click, display order
+        CheckTick();
+    }
+
+
+    void StateOrder()
+    {
         Textbox.text="Hello! I want: \n";
         for (int i = 0; i < Order.Count - 1; i++)
         {
@@ -25,9 +35,27 @@ public class CustomerBehav : MonoBehaviour
         }
         Textbox.text += Order[Order.Count - 1] + ".";
 
-        yield return new WaitForSeconds(5f);
+    }
 
-        Textbox.text= "Please make it quick";
+    void CheckTick()
+    {
+          if (Input.GetMouseButtonDown(0))
+        {
+            // Cast a ray from the mouse position
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+            if (hit.collider != null)
+            {
+                if (hit.collider.CompareTag("Tick"))
+                {
+                    Textbox.text= "Please make it quick";
+                    serve.SetActive(true);
+                    discard.SetActive(true);
+                    DraggableIngredient.EnableControls();
+                    GameObject.FindWithTag("Tick").SetActive(false);    
+                }
+            }
+        }
     }
 
 }
